@@ -3,12 +3,12 @@
 
 <html lang='fr'>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% include "header.html" %}
         <title>ZipTools - Mail</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/mail.css' %}" />
     </head>
     <body>
+        {% include "navbar.html" %}
         <div id="mail">
             <h3>Envoi de mail</h3>
             <form method="post">
@@ -39,5 +39,14 @@
                 </div>
             </form>
         </div>
+        
+        <script type="text/javascript">
+            // Affiche une alerte si le mail s'est bien envoyé 
+            let mailSend = {{ mailSend }};
+            console.log(mailSend)
+            if (mailSend === 0) {
+                alert('Mail envoyé avec succès !');
+            }
+        </script>
     </body>
 </html>
