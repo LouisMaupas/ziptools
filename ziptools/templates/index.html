@@ -4,5 +4,17 @@
     </head>
     <body>
         <h1>ZipTools</h1>
+        <div class="zip-infos"> 
+
+        </div>
+        <div class="zip-form">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form }}
+                {% if type == "get" %}
+                    <input type="submit" value="Submit">
+                {% endif %}
+            </form>
+        </div>
     </body>
 </html>
