@@ -3,6 +3,8 @@
 ## Projet
 ZipTools est un projet Django utilisant principalement les librairies zipfile et smtplib(mail), réalisé par Louis MAUPAS et Grégoire LE ROUX.
 
+Il permet de mettre n'importe quel fichier zip et de pouvoir voir les fichiers à l'intérieur puis d'envoyer un mail avec le fichier zip en pièce-jointe.
+
 ## Prérequis
 Python et les librairies zipfile, smtplib & dotenv
 
