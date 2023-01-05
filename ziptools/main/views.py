@@ -13,18 +13,23 @@ def index(request):
     global data
     data = {}
     if request.method == "GET":
-        form = FormUploadFile()
-        data["form"] = form
+        # form = FormUploadFile()
+        # data["form"] = form
         data["message"] = "Nous sommes dans un GET."
     elif request.method == "POST":
-        form = FormUploadFile(request.POST, request.FILES)
+        uploaded_file = request.FILES['file-upload']
+        # file_name = uploaded_file.name
+        # file_type = uploaded_file.content_type
+        # form = FormUploadFile(request.POST, request.FILES)
         # handle_uploaded_file(request.FILES['file'])
-        data["form"] = form
+        # data["form"] = form
+        print(uploaded_file.name)
+        strg_files_name = []
+        for file in uploaded_file:
+            strg_files_name.append(file.name)
+        data["file_name"] : uploaded_file.name
         data["message"] = "Voici les informations de chaque fichiers :"
-        messages = []
-        files = request.FILES.getlist('file_field')
-        for f in files:
-            messages.append(f)
+        return HttpResponse(template.render(data))
     return HttpResponse(template.render(data))
 
 
@@ -40,4 +45,3 @@ def index(request):
 
 
 
-    
