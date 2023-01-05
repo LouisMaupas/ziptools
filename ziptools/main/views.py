@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from .forms import FormUploadFile
 from .utils.handle_upload_file import handle_uploaded_file
 from django.views.decorators.csrf import csrf_exempt
+from .utils.sendmail import SendEmail
 import os
 import zipfile
 import datetime
@@ -40,17 +41,6 @@ def index(request):
 def mail(request):
     template = loader.get_template('mail.html')
     
-    if request.GET:
-        pass
-    elif request.POST:
-        print("POST: " + str(request.POST))
-        destinataire = request.POST["destinataire"]
-        sujet = request.POST["sujet"]
-        corps = request.POST["corps"]
-        signature = request.POST["signature"]
-        print(destinataire + " " + sujet)
-        pass
-
     signature = ""
 
     # Récupère le path du fichier zip
@@ -69,6 +59,18 @@ def mail(request):
             # Date de la dernière modification du fichier
             filelastmodified = str(datetime.datetime(file.date_time[0], file.date_time[1], file.date_time[2], file.date_time[3], file.date_time[4], file.date_time[5]))
             signature += file.filename + "\t\t\t\t" + filelastmodified + "\t\t" + str(file.file_size) + "\n"
+
+
+    if request.GET:
+        pass
+    elif request.POST:
+        # Récupération des informations du formulaires en POST
+        destinataire = request.POST["destinataire"]
+        sujet = request.POST["sujet"]
+        corps = request.POST["corps"]
+        signatureMail = request.POST["signature"]
+        if(destinataire != "" and sujet != ""):
+            SendEmail(destinataire, sujet, corps, signatureMail, filepath)
 
     data = {
         "signature": signature
