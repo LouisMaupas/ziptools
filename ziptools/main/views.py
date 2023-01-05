@@ -1,10 +1,5 @@
-import json
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http import HttpResponse
 from django.template import loader
-from django.http import HttpResponseRedirect
-from .forms import FormUploadFile
-from .utils.handle_upload_file import handle_uploaded_file
 from django.views.decorators.csrf import csrf_exempt
 from .utils.sendmail import SendEmail
 import os
@@ -28,20 +23,22 @@ def index(request):
         # Enregistrement du fichier dans le stockage par défaut
         file = request.FILES['file-upload']
         filePath = '%s/%s' % ('static', 'ziptools.zip')
+        # Supprime s'il y a déjà un fichier présent
+        default_storage.delete(filePath)
         default_storage.save(filePath,file)
         return redirect('/choose')
     return HttpResponse(template.render(data))
 
 @csrf_exempt
 def chooseFile(request):
-    """ Gère la selection des fichiers, enregsitre le nouveau fichier et redirige vers la page d'envoi de mail """
+    """ Présente les fichiers qui vont être envoyés puis redirige vers la page d'envoi de mail """
     template = loader.get_template('index.html')
     global data
     data = {
         "page": "choose"
     }
     if request.method == "GET":
-        """Affiche la page de selection des fichiers du futur fichier compressé"""
+        """Affiche les fichiers"""
         # Recupère le fichier uploadé
         filepath = os.path.join('static', 'ziptools.zip')
         zip = zipfile.ZipFile(filepath)
@@ -55,7 +52,6 @@ def chooseFile(request):
         return HttpResponse(template.render(data))
     elif request.method == "POST":
         """Redirige vers la page d'envoi de mail"""
-        # TODO supprime static/ziptools.zip
         return redirect('/mail')
 
     
