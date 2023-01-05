@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
     path('mail/', views.mail),
+    path('choose/', views.chooseFile),
 ]

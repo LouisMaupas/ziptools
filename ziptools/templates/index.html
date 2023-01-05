@@ -5,17 +5,34 @@
     </head>
     <body>
         <h1>ZipTools</h1>
-        <div class="zip-infos"> 
-            {{message}}
-            {{file_name}}
-        </div>
-        <div class="zip-form">
-            <form action="" method="post" enctype="multipart/form-data" >
-                <input type="file" name="file-upload" id="file-upload">
-                <input type="submit" value="Submit" ajax="true">
+        {% if page == "index" %}
+        <main>
+            <div class="zip-infos"> 
+                {{file_name}}
+            </div>
+            <div class="zip-form">
+                <form action="" method="post" enctype="multipart/form-data" >
+                    <input type="file" name="file-upload" id="file-upload" accept=".zip">
+                    <input type="submit" value="Submit" ajax="true">
+                </form>
+            </div>
+        </main>
+        {% elif page == "choose"%}
+        <main>
+            <h2>Choisissez les fichiers à envoyer</h2>
+            <form action="" method="post" enctype="multipart/form-data">
+                <ul>
+                {% for file in files %}
+                    <li>
+                        <input type="checkbox"{{file}}/>
+                    </li>
+                {% endfor %}
+                </ul>
+                <button> Rédiger le mail </button>
             </form>
-        </div>
-        <script> const files="{{file_name}}" </script>
+        </main>
+        {% endif %}
+        <script> const files={{file}} </script>
         <script src={% static 'js/main.js' %}></script>
     </body>
 </html>
