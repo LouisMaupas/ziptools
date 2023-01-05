@@ -13,19 +13,19 @@
             </div>
             <div class="zip-form">
                 <form action="" method="post" enctype="multipart/form-data" >
-                    <input type="file" name="file-upload" id="file-upload" accept=".zip">
+                    <input type="file" name="file-upload" id="file-upload" accept=".zip" required>
                     <input type="submit" value="Submit" ajax="true">
                 </form>
             </div>
         </main>
         {% elif page == "choose"%}
         <main>
-            <h2>Choisissez les fichiers à envoyer</h2>
+            <h2>Voici les fichiers qui vont être envoyés :</h2>
             <form action="" method="post" enctype="multipart/form-data">
                 <ul>
                 {% for file in files %}
                     <li>
-                        <input type="checkbox"{{file}}/>
+                        {{file}}
                     </li>
                 {% endfor %}
                 </ul>
