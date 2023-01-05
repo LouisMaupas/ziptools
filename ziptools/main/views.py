@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+import json
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponseRedirect
@@ -9,32 +10,54 @@ from .utils.sendmail import SendEmail
 import os
 import zipfile
 import datetime
+from django.core.files.storage import default_storage
+from django.shortcuts import redirect
 
 
 @csrf_exempt
 def index(request):
+    """Page d'accueil permet à l'utilisateur d'upload son fichier zip"""
     template = loader.get_template('index.html')
     global data
-    data = {}
+    data = {"page": "index"}
     if request.method == "GET":
-        # form = FormUploadFile()
-        # data["form"] = form
-        data["message"] = "Nous sommes dans un GET."
+        """Affiche le formulaire"""
+        pass
     elif request.method == "POST":
-        uploaded_file = request.FILES['file-upload']
-        # file_name = uploaded_file.name
-        # file_type = uploaded_file.content_type
-        # form = FormUploadFile(request.POST, request.FILES)
-        # handle_uploaded_file(request.FILES['file'])
-        # data["form"] = form
-        print(uploaded_file.name)
-        strg_files_name = []
-        for file in uploaded_file:
-            strg_files_name.append(file.name)
-        data["file_name"] : uploaded_file.name
-        data["message"] = "Voici les informations de chaque fichiers :"
-        return HttpResponse(template.render(data))
+        """Enregistre le fichier zip et redirige vers la vue qui s'occupera de la 2eme étape """
+        # Enregistrement du fichier dans le stockage par défaut
+        file = request.FILES['file-upload']
+        filePath = '%s/%s' % ('static', 'ziptools.zip')
+        default_storage.save(filePath,file)
+        return redirect('/choose')
     return HttpResponse(template.render(data))
+
+@csrf_exempt
+def chooseFile(request):
+    """ Gère la selection des fichiers, enregsitre le nouveau fichier et redirige vers la page d'envoi de mail """
+    template = loader.get_template('index.html')
+    global data
+    data = {
+        "page": "choose"
+    }
+    if request.method == "GET":
+        """Affiche la page de selection des fichiers du futur fichier compressé"""
+        # Recupère le fichier uploadé
+        filepath = os.path.join('static', 'ziptools.zip')
+        zip = zipfile.ZipFile(filepath)
+        # Le "dezip"
+        files = zip.infolist()
+        lst_files_to_choose = []
+        for f in files:
+            lst_files_to_choose.append(f.filename)
+        # Envoi les fichiers dezzipés
+        data["files"] = lst_files_to_choose
+        return HttpResponse(template.render(data))
+    elif request.method == "POST":
+        """Redirige vers la page d'envoi de mail"""
+        # TODO supprime static/ziptools.zip
+        return redirect('/mail')
+
     
 # View Page Mail
 @csrf_exempt
