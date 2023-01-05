@@ -1,20 +1,21 @@
+{% load static %}
 <html>
     <head>
         <title>ZipTools</title>
     </head>
     <body>
-        <h1>ZipTools</h1>
+        {% include "navbar.html" %}
         <div class="zip-infos"> 
-
+            {{message}}
+            {{file_name}}
         </div>
         <div class="zip-form">
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ form }}
-                {% if type == "get" %}
-                    <input type="submit" value="Submit">
-                {% endif %}
+            <form action="" method="post" enctype="multipart/form-data" >
+                <input type="file" name="file-upload" id="file-upload">
+                <input type="submit" value="Submit" ajax="true">
             </form>
         </div>
+        <script> const files="{{file_name}}" </script>
+        <script src={% static 'js/main.js' %}></script>
     </body>
 </html>
