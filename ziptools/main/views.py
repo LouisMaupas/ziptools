@@ -42,9 +42,10 @@ def mail(request):
     template = loader.get_template('mail.html')
     
     signature = ""
+    mailSend = -1
 
     # Récupère le path du fichier zip
-    filepath = os.path.join('static', 'tp-kivy.zip')
+    filepath = os.path.join('static', 'ziptools.zip')
 
     # Vérifie que le path désigne bien un fichier zip
     fileCorrect = zipfile.is_zipfile(filepath)
@@ -54,11 +55,11 @@ def mail(request):
         # Récupère toutes les infos des fichiers dans le zip
         files = zip.infolist()
         # Parcours tous les fichiers du zip et définit la signature du mail
-        signature = "Nom\t\t\t\t\tDernière modification\t\tTaille\n"
+        signature = "Nom\t\t\t\tDernière modification\t\tTaille\n"
         for file in files:
             # Date de la dernière modification du fichier
             filelastmodified = str(datetime.datetime(file.date_time[0], file.date_time[1], file.date_time[2], file.date_time[3], file.date_time[4], file.date_time[5]))
-            signature += file.filename + "\t\t\t\t" + filelastmodified + "\t\t" + str(file.file_size) + "\n"
+            signature += file.filename + "\t\t\t" + filelastmodified + "\t\t" + str(file.file_size) + "\n"
 
 
     if request.GET:
@@ -71,8 +72,11 @@ def mail(request):
         signatureMail = request.POST["signature"]
         if(destinataire != "" and sujet != ""):
             SendEmail(destinataire, sujet, corps, signatureMail, filepath)
+            mailSend = 0
 
+    print(mailSend)
     data = {
-        "signature": signature
+        "signature": signature,
+        "mailSend": mailSend,
     }
     return HttpResponse(template.render(data))
