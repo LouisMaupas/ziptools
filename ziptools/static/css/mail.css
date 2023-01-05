@@ -1,0 +1,18 @@
+#mail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-field {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 7px
+}
+
+.button-send {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
