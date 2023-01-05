@@ -1,8 +1,43 @@
-<html>
+{% load static %}
+<!doctype html>
+
+<html lang='fr'>
     <head>
-        <title>Envoi de mail</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>ZipTools - Mail</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/mail.css' %}" />
     </head>
     <body>
-        <h3>Envoi de mail</h3>
+        <div id="mail">
+            <h3>Envoi de mail</h3>
+            <form method="post">
+                <div class="form-field">
+                    <label for="destinataire">Destinataire :</label>
+                    <input type="email" id="destinataire" name="destinataire" placeholder="isitech@benke.fr" required size="40" />
+                </div>
+                
+                <div class="form-field">
+                    <label for="sujet">Sujet :</label>
+                    <input type="text" id="sujet" name="sujet" placeholder="TP Python ZipTools" required size="40" />
+                </div>
+
+                <div class="form-field">
+                    <label for="corps">Corps :</label>
+                    <textarea type="text" id="corps" name="corps" placeholder="Bonjour, vous trouverez en pièce-jointe de ce mail le projet ZipTools." rows="6" cols="40"></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="signature">Signature du fichier zip :</label>
+                    <textarea type="text" id="signature" name="signature" readonly rows="6" cols="40">{{signature}}</textarea>
+                </div>
+
+                <div>
+                    <div class="button-send">
+                        <button>Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </body>
 </html>
